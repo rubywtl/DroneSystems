@@ -2,7 +2,7 @@
 #include <thread>
 #include <atomic>
 #include <chrono>
-#include <opencv2/opencv.hpp>
+// #include <opencv2/opencv.hpp>
 #include <unistd.h>
 
 // Mock motor control class
