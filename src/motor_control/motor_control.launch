@@ -1,0 +1,4 @@
+<launch>
+    <!-- Launch the motor control node -->
+    <node pkg="drone_processing" type="control" name="motor_control_node" />
+</launch>

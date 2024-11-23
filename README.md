@@ -1,51 +1,70 @@
-# drone_processing
+# Drone Processing & Control
 
-This project controls a drone's motor and processes images using computer vision algorithms. It runs on a system that supports WSL (Windows Subsystem for Linux) and uses `g++` to compile C++ code while leveraging Python for image processing with OpenCV.
+This ROS package provides image processing and motor control functionality for a drone. The package is designed to process camera feed data and control the drone's movement based on the processed information.
 
-## Setup Instructions (test run on WSL)
+## Features
 
-### 1. **Install WSL (Windows Subsystem for Linux)**
+- **Image Processing**: Captures camera feed and performs image processing tasks.
+- **Motor Control**: Controls the drone's motor based on input data or image processing results.
+- **ROS Integration**: Uses ROS nodes for communication between different modules.
+- **Visualization**: Displays the camera feed in real-time using `rqt_image_view`.
 
-If you haven't already installed WSL, follow these steps:
+## Requirements
 
-1. Open PowerShell as Administrator and run:
-    ```bash
-    wsl --install
-    ```
-2. Restart your machine after installation.
-3. Set up a Linux distribution, such as Ubuntu, from the Microsoft Store.
+- ROS (Robot Operating System)
+- Catkin workspace setup
+- OpenCV (for image processing)
+- Sensor drivers for the camera
 
-### 2. **Install `g++` Compiler on WSL**
+## Setup
 
-You will need the `g++` compiler to compile the C++ code. Follow these steps:
+### 1. Create the Workspace
 
-1. Open the WSL terminal (e.g., Ubuntu).
-2. Update package lists and install `g++`:
-    ```bash
-    sudo apt update
-    sudo apt install g++
-    ```
-
-### 3. **Install Python Dependencies**
-
-The project uses Python for image processing, and OpenCV is required. To install it:
-
-1. Ensure `pip3` is installed. If not, install it by running:
-    ```bash
-    sudo apt install python3-pip
-    ```
-2. Install OpenCV:
-    ```bash
-    pip3 install opencv-python
-    ```
-
-### 4. **Clone the Repository**
-
-Clone the repository to your local machine:
+First, create a ROS workspace if you don't have one already:
 
 ```bash
-git clone https://github.com/yourusername/drone_processing.git
-cd drone_processing
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src
+catkin_init_workspace
+cd ..
+catkin_make
+source devel/setup.bash
 
+```
+## Launch the Nodes
 
+### 1. Launch Image Processing Node
+Run the image processing node which processes the camera feed:
 
+```bash
+roslaunch drone_processing imageprocessing.launch
+```
+
+### 2. Launch Motor Control Node
+Run the motor control node to control the drone's motors:
+
+```bash
+roslaunch drone_processing control.launch
+```
+
+## Visualize the Camera Feed
+You can visualize the camera feed from /camera/image_raw using rqt_image_view:
+
+```bash
+rosrun rqt_image_view rqt_image_view
+```
+
+This will open a GUI window displaying the live camera feed from the drone.
+
+### Troubleshooting
+- Camera Feed Not Displaying: Ensure that the camera is properly connected and streaming. You can check if the /camera/image_raw topic is being published by running:
+
+```bash
+rostopic list
+```
+
+- Missing Dependencies: If you encounter issues with missing dependencies, run:
+
+```bash
+rosdep install --from-paths src --ignore-src -r -y
+```

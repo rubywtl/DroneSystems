@@ -2,14 +2,21 @@ import cv2
 import time
 
 def process_image(image):
-    # Simulate image processing (e.g., object detection, depth mapping)
     print("Processing image...")
     cv2.imshow('Processed Image', image)
-    cv2.waitKey(1)  # Display image for a short time
+    cv2.waitKey(1) 
+
+
+def object_detection(image):
+    print("object detection...")
+
+
+def depth_mapping(image):
+    print("Depth mapping...")
+
 
 def capture_image():
-    # Initialize camera capture (assumes webcam or camera module is connected)
-    cap = cv2.VideoCapture(0)  # OpenCV uses 0 for the default camera
+    cap = cv2.VideoCapture(0) 
     if not cap.isOpened():
         print("Error: Could not open camera.")
         return
@@ -20,15 +27,13 @@ def capture_image():
             print("Error: Failed to grab frame.")
             break
         
-        # Process the captured frame
         process_image(frame)
 
-        # Simulate frame processing delay
         time.sleep(1)
 
-    # Release the camera when done
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     capture_image()
