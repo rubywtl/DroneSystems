@@ -1,3 +1,5 @@
+// Full thrust-stand script for measuring motor thrust force
+
 #include <Servo.h>
 #include <HX711.h>
 
