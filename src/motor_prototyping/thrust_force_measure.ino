@@ -13,7 +13,7 @@ HX711 scale;
 Servo esc;
 
 // Calibration factor for the load cell
-float calibration_factor = -7050; // Adjust as needed (separate calibration program required)
+float calibration_factor = -410; // Adjust as needed (separate calibration program required)
 
 void setup() {
   // Initialize Serial Monitor
@@ -68,7 +68,7 @@ void loop() {
     float thrust = scale.get_units(10); // Average of 10 readings
     Serial.print("Thrust: ");
     Serial.print(thrust, 2); // Print thrust with one decimal place
-    Serial.print(" units (e.g., lbs or kg)");
+    Serial.print(" grams (g)"); // tolerance is +-1g (due to fluctuations)
     Serial.print(" | Calibration factor: ");
     Serial.println(calibration_factor);
   } else {
