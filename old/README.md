@@ -47,5 +47,11 @@ Clone the repository to your local machine:
 git clone https://github.com/yourusername/drone_processing.git
 cd drone_processing
 
+```
 
+```cpp
+int main(int argc, char* argv[]) {
+    cout << "Test commit" << endl;
+    return EXIT_SUCCESS;
+}
 
