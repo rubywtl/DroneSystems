@@ -1,0 +1,4 @@
+camera_node:
+  mode: testing
+control_node:
+  mode: testing

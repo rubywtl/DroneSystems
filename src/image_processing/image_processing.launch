@@ -1,7 +1,0 @@
-<launch>
-    <!-- Launch the camera driver node -->
-    <node pkg="drone_processing" type="cameradriver" name="camera_driver_node" />
-    
-    <!-- Launch the Python image processing node -->
-    <node pkg="drone_processing" type="imageprocessing.py" name="image_processing_node" output="screen" />
-</launch>

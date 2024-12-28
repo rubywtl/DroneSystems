@@ -1,70 +1,68 @@
-# Drone Processing & Control
-
-This ROS package provides image processing and motor control functionality for a drone. The package is designed to process camera feed data and control the drone's movement based on the processed information.
-
-## Features
-
-- **Image Processing**: Captures camera feed and performs image processing tasks.
-- **Motor Control**: Controls the drone's motor based on input data or image processing results.
-- **ROS Integration**: Uses ROS nodes for communication between different modules.
-- **Visualization**: Displays the camera feed in real-time using `rqt_image_view`.
-
-## Requirements
-
-- ROS (Robot Operating System)
-- Catkin workspace setup
-- OpenCV (for image processing)
-- Sensor drivers for the camera
-
-## Setup
-
-### 1. Create the Workspace
-
-First, create a ROS workspace if you don't have one already:
-
+## Prerequisites
+### Download docker
+On Linux (or WSL)
 ```bash
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
-catkin_init_workspace
-cd ..
-catkin_make
-source devel/setup.bash
-
-```
-## Launch the Nodes
-
-### 1. Launch Image Processing Node
-Run the image processing node which processes the camera feed:
-
-```bash
-roslaunch drone_processing imageprocessing.launch
+sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+# verify installation
+docker-compose --version
+# python dependencies
+pip install --upgrade setuptools
 ```
 
-### 2. Launch Motor Control Node
-Run the motor control node to control the drone's motors:
-
+## Simulation (local testing)
+### step 1: prepare docker image
 ```bash
-roslaunch drone_processing control.launch
+cd ./docker/ros2_dev
+sudo docker build -t ros2_dev_image .
+```
+### step 2: run docker container
+```bash
+sudo docker run -it --rm \
+  -v path/to/ur/repo:/workspace \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  ros2_dev_image bash
+ls /workspace # after entering the container make sure ur files are there
+```
+### step 3: build project
+```bash
+rm -rf build log install # ensures clean build
+colcon build --symlink-install
+source /opt/ros/humble/setup.bash 
+```
+### step 4: launch nodes
+launching nodes individually
+```bash
+ros2 run control_node control_node
+ros2 run camera_node camera_node
+ros2 run object_detection_node object_detection_node
+```
+launching the system together
+```bash
+# move launch file to install file
+cp ./launch/ml_tasks_launch.py ./install/control_node/share/control_node
+# launch camera and object detection node together in terminal 1
+ros2 launch control_node ml_tasks_launch.py
+# open a new terminal and get the list of running docker containers
+sudo docker ps
+# enter the container with the name of the container
+sudo docker exec -it container_name bash
+# launch control_node in terminal 2
+ros2 run control_node control_node
 ```
 
-## Visualize the Camera Feed
-You can visualize the camera feed from /camera/image_raw using rqt_image_view:
 
+## Raspberry Pi Deployment
+### step 1: connect to raspberry pi via ssh
 ```bash
-rosrun rqt_image_view rqt_image_view
+ssh your_ssh_address
 ```
-
-This will open a GUI window displaying the live camera feed from the drone.
-
-### Troubleshooting
-- Camera Feed Not Displaying: Ensure that the camera is properly connected and streaming. You can check if the /camera/image_raw topic is being published by running:
-
+### step 2: prepare docker image
 ```bash
-rostopic list
+cd ./docker/ros2_deploy
+docker build -t ros2_deploy_image .
 ```
-
-- Missing Dependencies: If you encounter issues with missing dependencies, run:
-
-```bash
-rosdep install --from-paths src --ignore-src -r -y
-```
+### step 3: run docker container
+### step 4: build project
+### step 5: launch nodes

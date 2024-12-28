@@ -1,0 +1,18 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: docker:stable
+  services:
+    - docker:dind
+  script:
+    - docker build -t ros2_runtime_image -f docker/ros2-runtime/Dockerfile .
+
+deploy:
+  stage: deploy
+  script:
+    - docker save ros2_runtime_image | ssh pi@raspberrypi.local 'docker load && docker run -d --net=host --privileged ros2_runtime_image'
+  only:
+    - main

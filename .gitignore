@@ -1,2 +1,3 @@
-./vcpkg
-./*/drone_control
+/log
+/build
+/install
