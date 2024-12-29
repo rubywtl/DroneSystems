@@ -33,7 +33,7 @@ sudo docker build -t ros2_dev_image .
 ### step 2: run docker container
 ```bash
 sudo docker run -it --rm \
-  -v path/to/ur/repo:/workspace \
+  -v ~/drone_processing:/workspace \
   -v /etc/localtime:/etc/localtime:ro \
   -v /etc/timezone:/etc/timezone:ro \
   ros2_dev_image bash
