@@ -1,7 +1,21 @@
 ## Prerequisites
-### Download docker
+### WSL and Docker
+Use WSL2 for a local Linux environment because it's integrated well in VSCode. Any Ubuntu is good. For **WSL (not Linux OS)** specifically, install Docker application on the Windows side for easier dev:
+1. Install Docker Desktop: [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
+2. Enable WSL integration in Docker Desktop settings.
+3. Test Docker in your WSL terminal:
+
+   ```bash
+   docker --version
+   ```
+
+WSL distros are default installed to your OS drive, and moving it to another SSD for example could be a little tricky...
+
+### Download docker-compose
 On Linux (or WSL)
 ```bash
+# install jq if not already
+sudo apt install jq
 sudo curl -L "https://github.com/docker/compose/releases/download/$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 # verify installation
