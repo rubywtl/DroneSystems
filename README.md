@@ -48,22 +48,15 @@ source /opt/ros/humble/setup.bash
 ### step 4: launch nodes
 launching nodes individually
 ```bash
-ros2 run control_node control_node
-ros2 run camera_node camera_node
-ros2 run object_detection_node object_detection_node
+# for simulation
+ros2 run control_node control_node __params:=mode:=simulation
+ros2 run camera_node camera_node __params:=mode:=simulation
+ros2 run object_detection_node object_detection_node __params:=mode:=simulation
 ```
 launching the system together
+(ensure to set the mode in the launch file before running)
 ```bash
-# move launch file to install file
-cp ./launch/ml_tasks_launch.py ./install/control_node/share/control_node
-# launch camera and object detection node together in terminal 1
-ros2 launch control_node ml_tasks_launch.py
-# open a new terminal and get the list of running docker containers
-sudo docker ps
-# enter the container with the name of the container
-sudo docker exec -it container_name bash
-# launch control_node in terminal 2
-ros2 run control_node control_node
+ros2 launch ./launch/full_system.launch.py
 ```
 
 
