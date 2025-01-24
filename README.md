@@ -60,16 +60,59 @@ ros2 launch ./launch/full_system.launch.py
 ```
 
 
-## Raspberry Pi Deployment
+## Raspberry Pi Deployment with Docker
 ### step 1: connect to raspberry pi via ssh
 ```bash
 ssh your_ssh_address
 ```
 ### step 2: prepare docker image
+this only needs to be done once or when the dockerfile is updated
 ```bash
 cd ./docker/ros2_deploy
 docker build -t ros2_deploy_image .
 ```
-### step 3: run docker container
-### step 4: build project
-### step 5: launch nodes
+### step 3: launch pigpio daemon (outside the docker)
+```bash
+sudo apt update
+sudo apt install pigpio
+sudo pigpiod
+ps aux | grep pigpiod # check if it is running
+
+# IF you want to STOP the daemon
+sudo killall pigpiod
+
+# IF you want to find the address of pigpio address
+hostname -I
+```
+### step 4: run docker container
+```bash
+sudo docker run -it --rm \
+  --device /dev/gpiomem \
+  --network host \
+  -v /home/perryz0/Documents/drone_processing:/workspace \
+  -v /etc/localtime:/etc/localtime:ro \
+  -v /etc/timezone:/etc/timezone:ro \
+  ros2_deploy_image bash
+```
+### step 5: build project
+```bash
+rm -rf build log install # ensures clean build
+colcon build --symlink-install
+source /opt/ros/humble/setup.bash 
+source install/setup.bash
+```
+### step 6: launch nodes
+launching nodes individually
+```bash
+# for simulation
+ros2 run grabber_node grabber_node __params:=mode:=deployment
+ros2 run camera_node camera_node __params:=mode:=deployment
+ros2 run object_detection_node object_detection_node __params:=mode:=deployment
+```
+launching the system together
+(ensure to set the mode in the launch file before running)
+```bash
+ros2 launch ./launch/full_system.launch.py
+```
+
+## Raspberry Pi Native Deployment 
