@@ -12,12 +12,16 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+    curl \ 
+    liblgpio-dev \
+    ros-humble-cv-bridge \
+    libgl1-mesa-glx
+    
+RUN rm -rf /var/lib/apt/lists/* 
 
 # Install Python dependencies (for ML tasks)
 RUN pip3 install --upgrade pip && \
-    pip3 install opencv-python tensorflow torch
+    pip3 install opencv-python tensorflow torch pigpio
 
 # Install ROS 2 dependencies (specific to your package)
 RUN rosdep init && \
